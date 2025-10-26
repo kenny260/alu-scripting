@@ -8,24 +8,22 @@ def top_ten(subreddit):
     If the subreddit is invalid, prints None.
     """
     headers = {'User-Agent': 'MyAPI/0.0.1'}
-    subreddit_url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     params = {'limit': 10}
 
-    response = requests.get(
-        subreddit_url, headers=headers, params=params, allow_redirects=False
-    )
+    response = requests.get(url, headers=headers, params=params, allow_redirects=False)
 
+    # Check for invalid subreddit
     if response.status_code != 200:
-        print(None)
+        print("None")
         return
 
-    data = response.json().get('data', {}).get('children', [])
-    if not data:
-        print(None)
+    posts = response.json().get("data", {}).get("children", [])
+    if not posts:
+        print("None")
         return
 
-    for post in data:
-        print(post.get('data', {}).get('title'))
-
-
-
+    for post in posts:
+        title = post.get("data", {}).get("title")
+        if title:
+            print(title)
