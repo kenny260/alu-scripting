@@ -8,34 +8,36 @@ def top_ten(subreddit):
     if subreddit is None or not isinstance(subreddit, str):
         print(None)
         return
-    
-    URL = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
-    HEADERS = {"User-Agent": "PostmanRuntime/7.35.0"}
-    
+
+    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
+    headers = {"User-Agent": "PostmanRuntime/7.35.0"}
+
     try:
-        RESPONSE = requests.get(URL, headers=HEADERS, allow_redirects=False)
-        
+        response = requests.get(url, headers=headers, allow_redirects=False)
+
         # Check if the request was successful
-        if RESPONSE.status_code != 200:
+        if response.status_code != 200:
             print(None)
             return
-            
-        data = RESPONSE.json().get("data")
-        
+
+        data = response.json().get("data")
+
         # Check if data exists
         if data is None:
             print(None)
             return
-            
-        HOT_POSTS = data.get("children")
-        
-        # Check if children exists and is not empty
-        if HOT_POSTS is None:
+
+        hot_posts = data.get("children")
+
+        # Check if children exists
+        if hot_posts is None or len(hot_posts) == 0:
             print(None)
             return
-            
-        for post in HOT_POSTS:
-            print(post.get('data').get('title'))
-            
+
+        for post in hot_posts:
+            title = post.get('data').get('title')
+            if title:
+                print(title)
+
     except Exception:
         print(None)
