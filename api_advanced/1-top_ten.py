@@ -10,7 +10,7 @@ def top_ten(subreddit):
         return
 
     url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
-    headers = {"User-Agent": "PostmanRuntime/7.35.0"}
+    headers = {"User-Agent": "MyRedditApp/0.0.1"}
 
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
@@ -20,24 +20,21 @@ def top_ten(subreddit):
             print(None)
             return
 
-        data = response.json().get("data")
-
-        # Check if data exists
-        if data is None:
+        json_data = response.json()
+        
+        if json_data.get("data") is None:
             print(None)
             return
 
-        hot_posts = data.get("children")
+        children = json_data.get("data").get("children")
 
-        # Check if children exists
-        if hot_posts is None or len(hot_posts) == 0:
+        if children is None:
             print(None)
             return
 
-        for post in hot_posts:
+        for post in children:
             title = post.get('data').get('title')
-            if title:
-                print(title)
+            print(title)
 
     except Exception:
         print(None)
